@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { ClerkProvider } from '@clerk/nextjs';
 import { ThemeProvider } from '@/components/ui/theme-provider';
+import { Toaster } from '@/components/ui/toaster';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -25,6 +26,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
                         {children}
                     </ThemeProvider>
+                    <Toaster />
                 </body>
             </html>
         </ClerkProvider>
