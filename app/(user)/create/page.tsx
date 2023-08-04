@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
+import { useToast } from '@/components/ui/use-toast';
 import { submitPost } from '@/lib/postActions';
 
 const Create = () => {
@@ -16,6 +17,7 @@ const Create = () => {
     const [containerWidth, setContainerWidth] = useState<number>(0);
     const containerRef = useRef<HTMLDivElement>(null);
     const router = useRouter();
+    const { toast } = useToast();
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         const selected = e.target.files;
@@ -31,10 +33,20 @@ const Create = () => {
 
     const handleSubmit = async () => {
         if (imgs) {
+            toast({
+                title: 'Uploading post',
+                description: 'Please wait while we upload your post',
+            });
+
             await submitPost(imgs, caption);
 
             router.refresh();
             router.push('/feed');
+
+            toast({
+                title: 'Post uploaded',
+                description: 'Your post has been uploaded',
+            });
         }
     };
 
