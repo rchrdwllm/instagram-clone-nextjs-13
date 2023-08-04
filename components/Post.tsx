@@ -22,15 +22,19 @@ const getPostDetails = async (id: string) => {
     });
 
     return [
-        res!.likes.map(like => like.userId) as String[],
-        res!.bookmarks.map(bookmark => bookmark.userId) as String[],
-        res!.comments as Comment[],
+        res!.likes.map(like => like.userId),
+        res!.bookmarks.map(bookmark => bookmark.userId),
+        res!.comments,
     ];
 };
 
 const Post = async ({ imageItems, caption, id, userId }: FeedItem) => {
     const user = await getUserById(userId);
-    const [likes, bookmarks, comments] = await getPostDetails(id);
+    const [likes, bookmarks, comments] = (await getPostDetails(id)) as [
+        string[],
+        string[],
+        Comment[]
+    ];
 
     return (
         <Card>
