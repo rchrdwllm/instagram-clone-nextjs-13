@@ -1,13 +1,15 @@
 import type { FeedItem } from '@/types';
+import type { Comment } from '@prisma/client';
 import { Avatar, AvatarImage } from './ui/avatar';
 import { Card, CardHeader, CardContent } from './ui/card';
 import PostActions from './PostActions';
 import PostControls from './PostControls';
-import Image from 'next/image';
-import { getDbUser } from '@/lib/auth';
+import PostImages from './PostImages';
+import PostComments from './PostComments';
+import { getUserById } from '@/lib/auth';
 import prisma from '@/lib/prisma';
 
-const getLikesBookmarks = async (id: string) => {
+const getPostDetails = async (id: string) => {
     const res = await prisma.post.findUnique({
         where: {
             id,
@@ -15,15 +17,20 @@ const getLikesBookmarks = async (id: string) => {
         select: {
             likes: true,
             bookmarks: true,
+            comments: true,
         },
     });
 
-    return [res!.likes.map(like => like.userId), res!.bookmarks.map(bookmark => bookmark.userId)];
+    return [
+        res!.likes.map(like => like.userId) as String[],
+        res!.bookmarks.map(bookmark => bookmark.userId) as String[],
+        res!.comments as Comment[],
+    ];
 };
 
-const Post = async ({ imageItems, caption, id }: FeedItem) => {
-    const user = await getDbUser();
-    const [likes, bookmarks] = await getLikesBookmarks(id);
+const Post = async ({ imageItems, caption, id, userId }: FeedItem) => {
+    const user = await getUserById(userId);
+    const [likes, bookmarks, comments] = await getPostDetails(id);
 
     return (
         <Card>
@@ -35,19 +42,12 @@ const Post = async ({ imageItems, caption, id }: FeedItem) => {
                         </Avatar>
                         <p className="font-medium text-sm">{user.firstName}</p>
                     </div>
-                    <PostActions id={id} />
+                    <PostActions id={id} caption={caption} />
                 </header>
             </CardHeader>
-            <CardContent className="flex flex-col space-y-4">
+            <CardContent className="flex flex-col space-y-2">
                 <div className="relative overflow-hidden rounded-lg">
-                    <Image
-                        src={imageItems[0].secureUrl}
-                        alt="image"
-                        width={0}
-                        height={0}
-                        sizes="100vw"
-                        style={{ width: '100%', height: 'auto', objectFit: 'cover' }}
-                    />
+                    <PostImages images={imageItems} />
                 </div>
                 <PostControls likes={likes} bookmarks={bookmarks} id={id} userId={user.id} />
                 {caption && (
@@ -56,6 +56,7 @@ const Post = async ({ imageItems, caption, id }: FeedItem) => {
                         {caption}
                     </p>
                 )}
+                <PostComments id={id} comments={comments} />
             </CardContent>
         </Card>
     );
