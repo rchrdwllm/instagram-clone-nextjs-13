@@ -51,3 +51,25 @@ export const bookmarkPost = async (postId: string) => {
 
     return data.data;
 };
+
+export const updatePost = async (postId: string, caption: string) => {
+    const res = await fetch(
+        new Request(createUrl(`/api/posts/${postId}`), {
+            method: 'PATCH',
+            body: JSON.stringify({ caption }),
+        })
+    );
+    const data = await res.json();
+
+    return data.data;
+};
+
+export const commentPost = async (postId: string, comment: string) => {
+    const res = await fetch(new Request(createUrl(`/api/posts/${postId}/comments`)), {
+        method: 'POST',
+        body: JSON.stringify({ comment }),
+    });
+    const data = await res.json();
+
+    return data.data;
+};
