@@ -43,7 +43,7 @@ const FeedPage = async () => {
 
     return (
         <div className="flex items-stretch">
-            <div className="flex flex-1 flex-col space-y-8 pt-8 px-72 pb-20">
+            <div className="flex flex-1 flex-col space-y-8 pt-8 px-72 pb-20 2xl:px-[28rem] xl:px-80 lg:px-56">
                 {feedItems.map((feedItem: FeedItem) => (
                     <Post key={feedItem.id} {...feedItem} />
                 ))}

@@ -59,7 +59,7 @@ const Create = () => {
     }, []);
 
     return (
-        <div ref={containerRef} className="pt-8 px-72 pb-20">
+        <div ref={containerRef} className="pt-8 px-72 pb-20 2xl:px-[28rem] xl:px-80 lg:px-56">
             <h1 className="text-3xl font-bold">Create a post</h1>
             <form action="" className="mt-8">
                 <div>

@@ -45,7 +45,7 @@ const UserPage = async ({ params: { id } }: UserPageProps) => {
     const isAuthor = await getAuthorStatus(id);
 
     return (
-        <div className="pt-8 px-72 pb-20">
+        <div className="pt-8 px-72 pb-20 2xl:px-[28rem] xl:px-80 lg:px-56">
             <header className="flex items-center space-x-8">
                 <Avatar className="h-[140px] w-[140px]">
                     <AvatarImage src={user.imageUrl} />
