@@ -1,7 +1,6 @@
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
-import { Separator } from '@/components/ui/separator';
-import UserPosts from '@/components/UserPosts';
-import { getUserById } from '@/lib/auth';
+import UserTabs from '@/components/UserTabs';
+import { getUserById, getAuthorStatus } from '@/lib/auth';
 import prisma from '@/lib/prisma';
 
 type UserPageProps = {
@@ -43,6 +42,7 @@ const UserPage = async ({ params: { id } }: UserPageProps) => {
         ...post,
         image: postsImgPreview[index].secureUrl,
     }));
+    const isAuthor = await getAuthorStatus(id);
 
     return (
         <div className="pt-8 px-72 pb-20">
@@ -59,12 +59,11 @@ const UserPage = async ({ params: { id } }: UserPageProps) => {
                     </div>
                     <p className="text-sm text-slate-400">
                         <span className="font-medium text-slate-50">{posts.length}</span>{' '}
-                        {posts.length > 1 ? 'posts' : 'post'}
+                        {posts.length > 1 || posts.length === 0 ? 'posts' : 'post'}
                     </p>
                 </div>
             </header>
-            <Separator className="my-8" />
-            <UserPosts posts={posts} />
+            <UserTabs isAuthor={isAuthor} posts={posts} />
         </div>
     );
 };

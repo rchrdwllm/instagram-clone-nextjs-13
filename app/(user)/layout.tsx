@@ -7,9 +7,10 @@ import {
     Bars3Icon,
     ArrowLeftOnRectangleIcon,
     PlusIcon,
+    HeartIcon,
+    BookmarkIcon,
 } from '@heroicons/react/24/outline';
 import NavLink from '@/components/NavLink';
-import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { SignOutButton } from '@clerk/nextjs';
@@ -45,6 +46,16 @@ const Layout = async ({ children }: { children: ReactNode }) => {
             href: '/messages',
             label: 'Messages',
             Icon: ChatBubbleLeftIcon,
+        },
+        {
+            href: `/user/${user.id}?tab=likes`,
+            label: 'Likes',
+            Icon: HeartIcon,
+        },
+        {
+            href: `/user/${user.id}?tab=bookmarks`,
+            label: 'Bookmarks',
+            Icon: BookmarkIcon,
         },
         {
             href: '/create',

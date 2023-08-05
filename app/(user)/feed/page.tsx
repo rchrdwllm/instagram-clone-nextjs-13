@@ -1,11 +1,8 @@
 import type { Post as PostType } from '@prisma/client';
 import type { FeedItem } from '@/types';
 import Post from '@/components/Post';
-import Link from 'next/link';
-import { Avatar, AvatarImage } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
+import NoData from '@/components/NoData';
 import prisma from '@/lib/prisma';
-import { getDbUser } from '@/lib/auth';
 
 const fetchImages = async (post: PostType) => {
     const images = await prisma.image.findMany({
@@ -41,7 +38,8 @@ const fetchPosts = async () => {
 
 const FeedPage = async () => {
     const feedItems: FeedItem[] = await fetchPosts();
-    const user = await getDbUser();
+
+    if (!feedItems.length) return <NoData />;
 
     return (
         <div className="flex items-stretch">

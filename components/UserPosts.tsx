@@ -3,6 +3,7 @@
 import { Post } from '@prisma/client';
 import Image from 'next/image';
 import Link from 'next/link';
+import NoPosts from './NoPosts';
 import { useRef, useState, useEffect } from 'react';
 
 const UserPosts = ({ posts }: { posts: Post[] }) => {
@@ -16,6 +17,13 @@ const UserPosts = ({ posts }: { posts: Post[] }) => {
             setContainerWidth(width);
         }
     }, []);
+
+    if (!posts.length)
+        return (
+            <div className="mt-12">
+                <NoPosts />
+            </div>
+        );
 
     return (
         <div ref={containerRef} className="mt-8 grid grid-cols-3 gap-4">

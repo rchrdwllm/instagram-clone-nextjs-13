@@ -27,7 +27,15 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useToast } from '@/components/ui/use-toast';
 
-const PostActions = ({ id, caption }: { id: string; caption: string }) => {
+const PostActions = ({
+    id,
+    caption,
+    redirectOnDelete,
+}: {
+    id: string;
+    caption: string;
+    redirectOnDelete?: boolean;
+}) => {
     const [currentCaption, setCurrentCaption] = useState(caption);
     const router = useRouter();
     const { toast } = useToast();
@@ -46,6 +54,10 @@ const PostActions = ({ id, caption }: { id: string; caption: string }) => {
             title: 'Post deleted',
             description: 'Your post has been deleted.',
         });
+
+        if (redirectOnDelete) {
+            router.back();
+        }
     };
 
     const handleUpdate = async () => {

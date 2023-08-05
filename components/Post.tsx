@@ -8,7 +8,7 @@ import PostImages from './PostImages';
 import PostComments from './PostComments';
 import CommentForm from './CommentForm';
 import Link from 'next/link';
-import { getUserById, getDbUser } from '@/lib/auth';
+import { getUserById, getDbUser, getAuthorStatus } from '@/lib/auth';
 import prisma from '@/lib/prisma';
 
 const getPostDetails = async (id: string) => {
@@ -33,7 +33,7 @@ const getPostDetails = async (id: string) => {
 const Post = async ({ imageItems, caption, id, userId }: FeedItem) => {
     const user = await getUserById(userId);
     const dbUser = await getDbUser();
-    const isAuthor = user.id === dbUser.id;
+    const isAuthor = await getAuthorStatus(userId);
     const [likes, bookmarks, comments] = (await getPostDetails(id)) as [
         string[],
         string[],

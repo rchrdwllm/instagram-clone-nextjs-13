@@ -9,7 +9,7 @@ import PostComments from '@/components/PostComments';
 import CommentForm from '@/components/CommentForm';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import prisma from '@/lib/prisma';
-import { getDbUser, getUserById } from '@/lib/auth';
+import { getAuthorStatus, getDbUser, getUserById } from '@/lib/auth';
 
 type PostPageProps = {
     params: {
@@ -46,9 +46,7 @@ const PostPage = async ({ params: { id } }: PostPageProps) => {
     const post = await getPost(id);
     const user = await getUserById((post as Post).userId);
     const dbUser = await getDbUser();
-    const isAuthor = user.id === dbUser.id;
-
-    console.log(isAuthor);
+    const isAuthor = await getAuthorStatus(user.id);
 
     return (
         <div className="h-screen flex py-28 px-48 space-x-4">
@@ -66,7 +64,9 @@ const PostPage = async ({ params: { id } }: PostPageProps) => {
                             </div>
                         </div>
                     </Link>
-                    {isAuthor && <PostActions id={id} caption={(post as Post).caption} />}
+                    {isAuthor && (
+                        <PostActions redirectOnDelete id={id} caption={(post as Post).caption} />
+                    )}
                 </header>
                 <Separator className="my-4" />
                 <div className="flex flex-col">

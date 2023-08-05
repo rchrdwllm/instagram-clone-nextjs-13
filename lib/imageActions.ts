@@ -1,6 +1,7 @@
 import { createUrl } from './utils';
 import { createPost } from './postActions';
 import sha1 from 'sha1';
+import axios from 'axios';
 
 export const uploadImages = async (imgs: File[], caption: string) => {
     const uploadedImgs = await Promise.all(
@@ -57,14 +58,11 @@ export const deleteImages = async (publicIds: string[]) => {
             const signature = generateSHA1(generateSignature(publicId, apiSecret));
             const url = `https://api.cloudinary.com/v1_1/rwilliam/image/destroy`;
 
-            await fetch(url, {
-                method: 'POST',
-                body: JSON.stringify({
-                    public_id: publicId,
-                    signature: signature,
-                    api_key: apiKey,
-                    timestamp: timestamp,
-                }),
+            await axios.post(url, {
+                public_id: publicId,
+                signature: signature,
+                api_key: apiKey,
+                timestamp: timestamp,
             });
         })
     );

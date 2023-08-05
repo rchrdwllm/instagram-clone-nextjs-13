@@ -28,3 +28,9 @@ export const getUserById = async (userId: string) => {
 
     return user as User;
 };
+
+export const getAuthorStatus = async (userId: string) => {
+    const dbUser = await getDbUser();
+
+    return dbUser.id === userId;
+};
