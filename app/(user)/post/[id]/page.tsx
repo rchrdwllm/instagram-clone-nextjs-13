@@ -69,13 +69,20 @@ const PostPage = async ({ params: { id } }: PostPageProps) => {
                     )}
                 </header>
                 <Separator className="my-4" />
-                <div className="flex flex-col">
+
+                <div className={`flex flex-col ${post.caption ? 'mt-4' : ''}`}>
                     <PostControls
                         likes={post.likes?.map(like => like.userId) as string[]}
                         bookmarks={post.bookmarks?.map(bookmark => bookmark.userId) as string[]}
                         id={id}
                         userId={dbUser.id}
                     />
+                    {post.caption && (
+                        <p className="text-sm text-slate-400 my-2">
+                            <span className="font-medium text-slate-50">{user.firstName}</span>{' '}
+                            {post.caption}
+                        </p>
+                    )}
                     <PostComments comments={post.comments as Comment[]} />
                     <CommentForm id={id} />
                 </div>
