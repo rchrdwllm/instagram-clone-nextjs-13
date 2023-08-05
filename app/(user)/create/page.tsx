@@ -52,14 +52,14 @@ const Create = () => {
 
     useEffect(() => {
         if (containerRef.current) {
-            const width = containerRef.current.clientWidth - 192;
+            const width = containerRef.current.clientWidth - 608;
 
             setContainerWidth(width);
         }
     }, []);
 
     return (
-        <div ref={containerRef} className="pt-8 px-20 pb-20">
+        <div ref={containerRef} className="pt-8 px-72 pb-20">
             <h1 className="text-3xl font-bold">Create a post</h1>
             <form action="" className="mt-8">
                 <div>

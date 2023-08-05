@@ -2,6 +2,7 @@
 
 import { HeartIcon, ChatBubbleLeftIcon, BookmarkIcon } from '@heroicons/react/24/outline';
 import { Button } from './ui/button';
+import Link from 'next/link';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { bookmarkPost, likePost } from '@/lib/postActions';
@@ -45,9 +46,11 @@ const PostControls = ({
                 >
                     <HeartIcon className="h-4 w-4 text-inherit" />
                 </Button>
-                <Button variant="ghost" className="px-3 text-slate-400">
-                    <ChatBubbleLeftIcon className="h-4 w-4 text-inherit" />
-                </Button>
+                <Link href={`/post/${id}`}>
+                    <Button variant="ghost" className="px-3 text-slate-400">
+                        <ChatBubbleLeftIcon className="h-4 w-4 text-inherit" />
+                    </Button>
+                </Link>
                 <div className="flex flex-1 justify-end">
                     <Button
                         onClick={handleBookmark}

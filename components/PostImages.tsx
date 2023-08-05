@@ -7,7 +7,7 @@ import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/24/outline';
 import { useRef, useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const PostImages = ({ images }: { images: ImageType[] }) => {
+const PostImages = ({ images, className }: { images: ImageType[]; className?: string }) => {
     const [selectedImg, setSelectedImg] = useState(0);
     const [isHovering, setIsHovering] = useState(false);
     const [width, setWidth] = useState(0);
@@ -37,7 +37,7 @@ const PostImages = ({ images }: { images: ImageType[] }) => {
             onMouseEnter={() => setIsHovering(true)}
             onMouseLeave={() => setIsHovering(false)}
             ref={containerRef}
-            className="relative overflow-x-hidden"
+            className={`relative overflow-x-hidden rounded-lg ${className}`}
         >
             <AnimatePresence>
                 {isHovering && images.length > 1 && (
@@ -76,7 +76,7 @@ const PostImages = ({ images }: { images: ImageType[] }) => {
             </AnimatePresence>
             <div
                 ref={sliderRef}
-                className="flex items-stretch"
+                className="h-full flex items-stretch"
                 style={{
                     transition: 'transform 1s cubic-bezier(0.16, 1, 0.3, 1)',
                 }}

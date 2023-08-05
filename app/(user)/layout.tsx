@@ -94,19 +94,6 @@ const Layout = async ({ children }: { children: ReactNode }) => {
                 </div>
             </aside>
             <main className="flex-1 overflow-y-scroll">{children}</main>
-            <aside className="border-l border-slate-800 px-4 pt-4">
-                <Link href={`/user/${user.id}`}>
-                    <Button variant="ghost" className="h-auto flex items-center space-x-4 p-4">
-                        <Avatar>
-                            <AvatarImage src={user.imageUrl} alt="user_image" />
-                        </Avatar>
-                        <div className="text-left">
-                            <h3 className="font-medium">{user.firstName}</h3>
-                            <p className="text-sm text-slate-500">{user.email}</p>
-                        </div>
-                    </Button>
-                </Link>
-            </aside>
         </div>
     );
 };
