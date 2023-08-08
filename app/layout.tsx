@@ -4,6 +4,7 @@ import { Inter } from 'next/font/google';
 import { ClerkProvider } from '@clerk/nextjs';
 import { ThemeProvider } from '@/components/ui/theme-provider';
 import { Toaster } from '@/components/ui/toaster';
+import NextTopLoader from 'nextjs-toploader';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -24,6 +25,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <html lang="en">
                 <body className={inter.className}>
                     <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+                        <NextTopLoader
+                            color="#f8fafc"
+                            initialPosition={0.08}
+                            crawlSpeed={200}
+                            height={2}
+                            crawl={true}
+                            showSpinner={false}
+                            easing="ease"
+                            speed={200}
+                        />
                         {children}
                     </ThemeProvider>
                     <Toaster />
