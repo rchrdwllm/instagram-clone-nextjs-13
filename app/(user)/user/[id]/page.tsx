@@ -58,6 +58,32 @@ const getLikeImagePreview = async (publicId: string) => {
     return res[0];
 };
 
+const getUserBookmarks = async (userId: string) => {
+    const res = await prisma.bookmark.findMany({
+        where: {
+            userId,
+        },
+        include: {
+            post: true,
+        },
+        orderBy: {
+            createdAt: 'desc',
+        },
+    });
+
+    return res;
+};
+
+const getBookmarkImagePreview = async (publicId: string) => {
+    const res = await prisma.image.findMany({
+        where: {
+            publicId,
+        },
+    });
+
+    return res[0];
+};
+
 const UserPage = async ({ params: { id } }: UserPageProps) => {
     const user = await getUserById(id);
     const userPosts = await getAllUserPosts(id);
@@ -75,6 +101,14 @@ const UserPage = async ({ params: { id } }: UserPageProps) => {
     const likes = userLikes.map((post, index) => ({
         ...post,
         image: likesImgPreview[index].secureUrl,
+    }));
+    const userBookmarks = await getUserBookmarks(id);
+    const bookmarksImgsPreview = await Promise.all(
+        userBookmarks.map(async bookmark => getBookmarkImagePreview(bookmark.post.images[0]))
+    );
+    const bookmarks = userBookmarks.map((post, index) => ({
+        ...post,
+        image: bookmarksImgsPreview[index].secureUrl,
     }));
     const isAuthor = await getAuthorStatus(id);
 
@@ -97,7 +131,7 @@ const UserPage = async ({ params: { id } }: UserPageProps) => {
                     </p>
                 </div>
             </header>
-            <UserTabs isAuthor={isAuthor} posts={posts} likes={likes} />
+            <UserTabs isAuthor={isAuthor} posts={posts} likes={likes} bookmarks={bookmarks} />
         </div>
     );
 };
