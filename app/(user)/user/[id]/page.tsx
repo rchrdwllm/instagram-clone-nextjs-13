@@ -32,6 +32,32 @@ const getPostImagePreview = async (publicId: string) => {
     return res[0];
 };
 
+const getUserLikes = async (userId: string) => {
+    const res = await prisma.like.findMany({
+        where: {
+            userId,
+        },
+        include: {
+            post: true,
+        },
+        orderBy: {
+            createdAt: 'desc',
+        },
+    });
+
+    return res;
+};
+
+const getLikeImagePreview = async (publicId: string) => {
+    const res = await prisma.image.findMany({
+        where: {
+            publicId,
+        },
+    });
+
+    return res[0];
+};
+
 const UserPage = async ({ params: { id } }: UserPageProps) => {
     const user = await getUserById(id);
     const userPosts = await getAllUserPosts(id);
@@ -41,6 +67,14 @@ const UserPage = async ({ params: { id } }: UserPageProps) => {
     const posts = userPosts.map((post, index) => ({
         ...post,
         image: postsImgPreview[index].secureUrl,
+    }));
+    const userLikes = await getUserLikes(id);
+    const likesImgPreview = await Promise.all(
+        userLikes.map(async like => getLikeImagePreview(like.post.images[0]))
+    );
+    const likes = userLikes.map((post, index) => ({
+        ...post,
+        image: likesImgPreview[index].secureUrl,
     }));
     const isAuthor = await getAuthorStatus(id);
 
@@ -63,7 +97,7 @@ const UserPage = async ({ params: { id } }: UserPageProps) => {
                     </p>
                 </div>
             </header>
-            <UserTabs isAuthor={isAuthor} posts={posts} />
+            <UserTabs isAuthor={isAuthor} posts={posts} likes={likes} />
         </div>
     );
 };

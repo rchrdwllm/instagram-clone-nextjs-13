@@ -1,13 +1,22 @@
 'use client';
 
-import type { Post } from '@prisma/client';
+import type { Post, Like } from '@prisma/client';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 import UserPosts from './UserPosts';
+import UserLikes from './UserLikes';
 import { Separator } from './ui/separator';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-const UserTabs = ({ isAuthor, posts }: { isAuthor: boolean; posts: Post[] }) => {
+const UserTabs = ({
+    isAuthor,
+    posts,
+    likes,
+}: {
+    isAuthor: boolean;
+    posts: Post[];
+    likes: (Like & { post: Post })[];
+}) => {
     const router = useRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
@@ -19,8 +28,6 @@ const UserTabs = ({ isAuthor, posts }: { isAuthor: boolean; posts: Post[] }) => 
     }, [tab]);
 
     useEffect(() => {
-        console.log(currentTab);
-
         router.refresh();
     }, [currentTab]);
 
@@ -53,7 +60,9 @@ const UserTabs = ({ isAuthor, posts }: { isAuthor: boolean; posts: Post[] }) => 
             <TabsContent value="posts">
                 <UserPosts posts={posts} />
             </TabsContent>
-            <TabsContent value="likes">Change your password here.</TabsContent>
+            <TabsContent value="likes">
+                <UserLikes likes={likes} />
+            </TabsContent>
             <TabsContent value="bookmarks">Change your password here.</TabsContent>
         </Tabs>
     ) : (
